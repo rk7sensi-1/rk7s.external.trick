@@ -1,0 +1,575 @@
+/*
+ * ==========================================
+ * SCRIPT EXTERNAL - AUXÍLIO RK7S
+ * ==========================================
+ * Arquivo: script external.txt
+ * Criado por: @rk7s_ffx
+ * Sistema de Injeção de Funções
+ * ==========================================
+ */
+
+// Sistema de chaves para validação e injeção
+const CHAVES_FUNCOES = {
+  'RK7S-AUX100-F4E2': {
+    nome: 'Auxílio 100%',
+    ativo: false,
+    injetar: function() {
+      console.log('[✓] Injetando: Auxílio 100%');
+      
+      // Código de injeção - Auxílio 100% (Mira Magnética)
+      window.auxilio100 = {
+        ativo: true,
+        precisao: 100,
+        magneticStrength: 0.95, // Força magnética 95%
+        smoothing: 0.3, // Suavização
+        headPriority: true, // Prioriza cabeça
+        iniciar: function() {
+          console.log('[INJECT] Auxílio 100% inicializado');
+          console.log('[INFO] Sistema magnético ativado - Força: 95%');
+          this.aplicarAuxilio();
+        },
+        aplicarAuxilio: function() {
+          // Sistema de mira magnética - gruda no alvo
+          window.magneticAim = {
+            enabled: true,
+            lockOnTarget: (target) => {
+              if (!target) return;
+              
+              const targetHead = target.headPosition || target.position;
+              const currentAim = window.currentAimPosition || { x: 0, y: 0 };
+              
+              // Calcula vetor magnético em direção à cabeça
+              const magneticForce = {
+                x: (targetHead.x - currentAim.x) * this.magneticStrength,
+                y: (targetHead.y - currentAim.y) * this.magneticStrength
+              };
+              
+              // Aplica suavização para movimento natural
+              window.aimAdjustment = {
+                x: magneticForce.x * this.smoothing,
+                y: magneticForce.y * this.smoothing
+              };
+              
+              console.log('[MAGNETIC] Mira grudada no alvo - Cabeça priorizada');
+            }
+          };
+          
+          console.log('[ACTIVE] Auxílio magnético de mira ativado');
+          console.log('[ACTIVE] Mira vai grudar automaticamente nos alvos');
+        }
+      };
+      
+      window.auxilio100.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-PREC-8B91': {
+    nome: 'Ativar Precisão',
+    ativo: false,
+    injetar: function() {
+      console.log('[✓] Injetando: Ativar Precisão');
+      
+      // Código de injeção - Precisão (Anti-tremor + Trava Cabeça)
+      window.precisaoAvancada = {
+        ativo: true,
+        stabilization: 0.85, // 85% de estabilização
+        headTracking: true, // Rastreamento de cabeça
+        maxDeviation: 2, // Máximo 2px de desvio
+        iniciar: function() {
+          console.log('[INJECT] Precisão ativada');
+          console.log('[INFO] Estabilização: 85%');
+          console.log('[INFO] Rastreamento de cabeça: ATIVO');
+          this.aplicarPrecisao();
+        },
+        aplicarPrecisao: function() {
+          // Remove tremor e balanço completamente
+          window.aimShake = 0;
+          window.aimSway = 0;
+          window.weaponRecoil = window.weaponRecoil * 0.15; // 85% menos recuo
+          
+          // Sistema de rastreamento e trava de cabeça
+          window.precisionSystem = {
+            enabled: true,
+            trackHead: (target) => {
+              if (!target || !target.headHitbox) return;
+              
+              const headBox = target.headHitbox;
+              window.targetLock = {
+                x: headBox.center.x,
+                y: headBox.center.y,
+                active: true,
+                locked: true
+              };
+              
+              // SISTEMA ANTI-OVERSHOOT - NÃO PASSA DA CABEÇA
+              window.aimBoundary = {
+                enabled: true,
+                maxOffset: this.maxDeviation, // 2px máximo
+                preventOvershoot: true,
+                correctAim: (currentPos) => {
+                  const target = window.targetLock;
+                  if (!target.active) return currentPos;
+                  
+                  // Se a mira passar da cabeça, corrige imediatamente
+                  const deviation = {
+                    x: Math.abs(currentPos.x - target.x),
+                    y: Math.abs(currentPos.y - target.y)
+                  };
+                  
+                  if (deviation.x > this.maxOffset || deviation.y > this.maxOffset) {
+                    // Snap de volta para a cabeça
+                    console.log('[CORRECTION] Mira corrigida - voltou para cabeça');
+                    return { x: target.x, y: target.y };
+                  }
+                  
+                  return currentPos;
+                }
+              };
+              
+              console.log('[PRECISION] Cabeça travada - Desvio máx: 2px');
+            }
+          };
+          
+          console.log('[ACTIVE] Sistema de precisão calibrado');
+          console.log('[ACTIVE] Mira estabilizada - Sem tremor');
+          console.log('[ACTIVE] Trava de cabeça ativada - NÃO passa do alvo');
+        }
+      };
+      
+      window.precisaoAvancada.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-FPS-C3D7': {
+    nome: 'FPS Boost',
+    ativo: false,
+    injetar: function() {
+      console.log('[✓] Injetando: FPS Boost');
+      
+      // Código de injeção - FPS
+      window.fpsBoost = {
+        ativo: true,
+        targetFPS: 120,
+        iniciar: function() {
+          console.log('[INJECT] FPS Boost inicializado - Target: 120 FPS');
+          this.otimizar();
+        },
+        otimizar: function() {
+          // Otimizações de renderização
+          window.graphicsQuality = 'performance';
+          window.shadowQuality = 'low';
+          window.particleEffects = 'minimal';
+          window.textureQuality = 'optimized';
+          
+          console.log('[ACTIVE] Otimização de FPS aplicada');
+          console.log('[INFO] Reduzindo texturas desnecessárias');
+          console.log('[INFO] Melhorando renderização');
+          console.log('[INFO] FPS otimizado para 120+');
+        }
+      };
+      
+      window.fpsBoost.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-FOV-A5F8': {
+    nome: 'FOV Customizado',
+    ativo: false,
+    valorFOV: 25,
+    injetar: function(valor = 25) {
+      this.valorFOV = valor;
+      console.log('[✓] Injetando: FOV Customizado -', valor + '%');
+      
+      // Código de injeção - FOV (Zona de Atração)
+      window.fovCustom = {
+        ativo: true,
+        valor: valor,
+        iniciar: function() {
+          console.log('[INJECT] FOV configurado para:', this.valor + '%');
+          this.aplicarFOV();
+        },
+        aplicarFOV: function() {
+          // FOV MÍNIMO - Define área onde mira gruda
+          window.fovSystem = {
+            minFOV: this.valor,
+            detectionRadius: this.valor * 1.5,
+            magneticZone: this.valor * 0.8,
+            
+            // Quanto MENOR o FOV, MAIS FORTE a atração
+            calculateMagneticForce: function() {
+              const inverseFOV = 50 - this.minFOV;
+              const magneticStrength = inverseFOV / 50; // 0 a 1
+              
+              return {
+                pullForce: 0.5 + (magneticStrength * 0.5), // 50% a 100%
+                snapDistance: this.minFOV,
+                autoLock: magneticStrength > 0.6
+              };
+            },
+            
+            applyMagnetic: function() {
+              const force = this.calculateMagneticForce();
+              
+              window.aimAssistZone = {
+                radius: this.minFOV,
+                strength: force.pullForce,
+                snapEnabled: force.autoLock,
+                
+                checkTarget: (target) => {
+                  if (!target) return false;
+                  
+                  const distance = this.calculateDistance(target);
+                  
+                  if (distance <= this.radius) {
+                    // Dentro da zona magnética - GRUDA
+                    console.log('[FOV] Alvo na zona magnética - GRUDANDO');
+                    window.magneticLock = true;
+                    window.magneticTarget = target;
+                    return true;
+                  }
+                  
+                  return false;
+                },
+                
+                calculateDistance: (target) => {
+                  const aim = window.currentAimPosition || { x: 0, y: 0 };
+                  const targetPos = target.position || { x: 0, y: 0 };
+                  return Math.sqrt(
+                    Math.pow(targetPos.x - aim.x, 2) + 
+                    Math.pow(targetPos.y - aim.y, 2)
+                  );
+                }
+              };
+              
+              console.log('[FOV] Zona de atração: ' + this.minFOV + '%');
+              console.log('[FOV] Força magnética: ' + (force.pullForce * 100).toFixed(0) + '%');
+              console.log('[FOV] Auto-trava: ' + (force.autoLock ? 'SIM' : 'NÃO'));
+            }
+          };
+          
+          window.fovSystem.applyMagnetic();
+          console.log('[ACTIVE] Campo de visão expandido');
+          console.log('[ACTIVE] FOV menor = Mira gruda mais fácil');
+        }
+      };
+      
+      window.fovCustom.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-PRECLVL-9E42': {
+    nome: 'Nível de Precisão',
+    ativo: false,
+    nivelPrecisao: 40,
+    injetar: function(nivel = 40) {
+      this.nivelPrecisao = nivel;
+      console.log('[✓] Injetando: Nível de Precisão -', nivel);
+      
+      // Código de injeção - Nível de Precisão (Suavização + Anti-Overshoot)
+      window.nivelPrecisao = {
+        ativo: true,
+        nivel: nivel,
+        iniciar: function() {
+          console.log('[INJECT] Nível de precisão:', this.nivel);
+          this.calibrar();
+        },
+        calibrar: function() {
+          const smoothness = this.nivel / 100; // 0 a 0.7
+          const headLockEnabled = this.nivel > 50;
+          
+          // SISTEMA DE SUAVIZAÇÃO PROGRESSIVA
+          window.aimSmoothing = {
+            horizontal: smoothness,
+            vertical: smoothness * 1.2, // Vertical mais suave
+            acceleration: 1 - (smoothness * 0.5),
+            
+            applySmooth: (movement) => {
+              return {
+                x: movement.x * this.horizontal,
+                y: movement.y * this.vertical
+              };
+            }
+          };
+          
+          // SISTEMA ANTI-OVERSHOOT - NÃO PASSA DA CABEÇA
+          const maxDeviation = Math.max(1, 10 - (this.nivel / 10));
+          
+          window.aimBoundary = {
+            enabled: true,
+            maxDeviation: maxDeviation, // Quanto maior nível, menor desvio
+            snapToHead: headLockEnabled,
+            overshootProtection: true,
+            
+            correctOvershoot: function(currentPos, targetPos) {
+              if (!targetPos || !this.enabled) return currentPos;
+              
+              const deviation = {
+                x: Math.abs(currentPos.x - targetPos.x),
+                y: Math.abs(currentPos.y - targetPos.y)
+              };
+              
+              // Se ultrapassar o limite, CORRIGE IMEDIATAMENTE
+              if (deviation.x > this.maxDeviation || deviation.y > this.maxDeviation) {
+                console.log('[ANTI-OVERSHOOT] Mira passou do limite - CORRIGINDO');
+                
+                if (this.snapToHead) {
+                  // Snap direto para cabeça
+                  return { x: targetPos.x, y: targetPos.y };
+                } else {
+                  // Limita ao máximo permitido
+                  return {
+                    x: targetPos.x + Math.sign(currentPos.x - targetPos.x) * this.maxDeviation,
+                    y: targetPos.y + Math.sign(currentPos.y - targetPos.y) * this.maxDeviation
+                  };
+                }
+              }
+              
+              return currentPos;
+            },
+            
+            preventVerticalOvershoot: function(currentY, targetY) {
+              // Proteção específica contra passar da cabeça verticalmente
+              if (currentY < targetY - this.maxDeviation) {
+                console.log('[VERTICAL-LOCK] Impedindo passar por cima da cabeça');
+                return targetY - this.maxDeviation;
+              }
+              if (currentY > targetY + this.maxDeviation) {
+                console.log('[VERTICAL-LOCK] Impedindo passar por baixo da cabeça');
+                return targetY + this.maxDeviation;
+              }
+              return currentY;
+            }
+          };
+          
+          console.log('[ACTIVE] Precisão calibrada');
+          console.log('[INFO] Suavização: ' + (smoothness * 100).toFixed(0) + '%');
+          console.log('[INFO] Trava cabeça: ' + (headLockEnabled ? 'SIM' : 'NÃO'));
+          console.log('[INFO] Desvio máximo permitido: ' + maxDeviation + 'px');
+          console.log('[INFO] Anti-overshoot: ATIVO - NÃO passa da cabeça');
+        }
+      };
+      
+      window.nivelPrecisao.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-AIM-D7B3': {
+    nome: 'Aimbot',
+    ativo: false,
+    injetar: function() {
+      console.log('[✓] Injetando: Aimbot');
+      
+      // Código de injeção - Aimbot
+      window.aimbot = {
+        ativo: true,
+        modo: 'auto',
+        headshot: true,
+        iniciar: function() {
+          console.log('[INJECT] Aimbot inicializado');
+          this.ativarSistema();
+        },
+        ativarSistema: function() {
+          window.aimbotSystem = {
+            enabled: true,
+            targetPriority: 'head',
+            autoFire: false,
+            
+            acquireTarget: () => {
+              // Sistema de aquisição automática de alvo
+              const nearestEnemy = window.findNearestEnemy();
+              if (nearestEnemy && nearestEnemy.visible) {
+                window.currentTarget = nearestEnemy;
+                window.aimPosition = nearestEnemy.headPosition;
+                console.log('[AIMBOT] Alvo adquirido - Travando cabeça');
+                return true;
+              }
+              return false;
+            }
+          };
+          
+          console.log('[ACTIVE] Sistema de mira automática ativado');
+          console.log('[INFO] Detecção de alvos: ON');
+          console.log('[INFO] Rastreamento automático: ON');
+          console.log('[INFO] Prioridade: CABEÇA');
+        }
+      };
+      
+      window.aimbot.iniciar();
+      return true;
+    }
+  },
+
+  'RK7S-RECL-6F94': {
+    nome: 'No Recoil',
+    ativo: false,
+    injetar: function() {
+      console.log('[✓] Injetando: No Recoil');
+      
+      // Código de injeção - No Recoil
+      window.noRecoil = {
+        ativo: true,
+        reducao: 100,
+        iniciar: function() {
+          console.log('[INJECT] No Recoil inicializado');
+          this.aplicarReducao();
+        },
+        aplicarReducao: function() {
+          // Remove recuo completamente
+          window.recoilMultiplier = 0;
+          window.verticalRecoil = 0;
+          window.horizontalRecoil = 0;
+          window.recoilPattern = null;
+          
+          // Estabilização total
+          window.weaponStability = {
+            vertical: 1.0,
+            horizontal: 1.0,
+            recovery: 0
+          };
+          
+          console.log('[ACTIVE] Redução de recuo ativada');
+          console.log('[INFO] Redução: 100%');
+          console.log('[INFO] Estabilização vertical: ON');
+          console.log('[INFO] Estabilização horizontal: ON');
+          console.log('[INFO] Arma completamente estável');
+        }
+      };
+      
+      window.noRecoil.iniciar();
+      return true;
+    }
+  }
+};
+
+// Função principal de injeção
+function injetarFuncoes(configuracao) {
+  console.log('\n' + '='.repeat(60));
+  console.log('INICIANDO SISTEMA DE INJEÇÃO - AUXÍLIO RK7S');
+  console.log('='.repeat(60) + '\n');
+
+  let injetadas = 0;
+  let falhas = 0;
+
+  // Injeta Auxílio 100%
+  if (configuracao.auxilio100) {
+    try {
+      CHAVES_FUNCOES['RK7S-AUX100-F4E2'].injetar();
+      injetadas++;
+    } catch (e) {
+      console.error('[✗] Erro ao injetar Auxílio 100%:', e);
+      falhas++;
+    }
+  }
+
+  // Injeta Ativar Precisão
+  if (configuracao.precisao) {
+    try {
+      CHAVES_FUNCOES['RK7S-PREC-8B91'].injetar();
+      injetadas++;
+    } catch (e) {
+      console.error('[✗] Erro ao injetar Precisão:', e);
+      falhas++;
+    }
+  }
+
+  // Injeta FPS
+  if (configuracao.fps) {
+    try {
+      CHAVES_FUNCOES['RK7S-FPS-C3D7'].injetar();
+      injetadas++;
+    } catch (e) {
+      console.error('[✗] Erro ao injetar FPS:', e);
+      falhas++;
+    }
+  }
+
+  // Injeta FOV (sempre injeta com o valor configurado)
+  try {
+    CHAVES_FUNCOES['RK7S-FOV-A5F8'].injetar(configuracao.fovMin || 25);
+    injetadas++;
+  } catch (e) {
+    console.error('[✗] Erro ao injetar FOV:', e);
+    falhas++;
+  }
+
+  // Injeta Nível de Precisão (sempre injeta com o valor configurado)
+  try {
+    CHAVES_FUNCOES['RK7S-PRECLVL-9E42'].injetar(configuracao.nivelPrecisao || 40);
+    injetadas++;
+  } catch (e) {
+    console.error('[✗] Erro ao injetar Nível de Precisão:', e);
+    falhas++;
+  }
+
+  // Injeta Aimbot
+  if (configuracao.aimbot) {
+    try {
+      CHAVES_FUNCOES['RK7S-AIM-D7B3'].injetar();
+      injetadas++;
+    } catch (e) {
+      console.error('[✗] Erro ao injetar Aimbot:', e);
+      falhas++;
+    }
+  }
+
+  // Injeta No Recoil
+  if (configuracao.noRecoil) {
+    try {
+      CHAVES_FUNCOES['RK7S-RECL-6F94'].injetar();
+      injetadas++;
+    } catch (e) {
+      console.error('[✗] Erro ao injetar No Recoil:', e);
+      falhas++;
+    }
+  }
+
+  // Relatório final
+  console.log('\n' + '='.repeat(60));
+  console.log('RELATÓRIO DE INJEÇÃO');
+  console.log('='.repeat(60));
+  console.log('Funções injetadas com sucesso:', injetadas);
+  console.log('Falhas:', falhas);
+  console.log('='.repeat(60) + '\n');
+
+  return {
+    sucesso: injetadas,
+    falhas: falhas,
+    total: injetadas + falhas
+  };
+}
+
+// Exemplo de uso com todas as funções ativadas
+// Baseado na configuração: FOV 50%, Precisão 70, todas marcadas
+const configuracaoExemplo = {
+  auxilio100: true,
+  precisao: true,
+  fps: true,
+  fovMin: 50,
+  nivelPrecisao: 70,
+  aimbot: true,
+  noRecoil: true
+};
+
+// Executa a injeção
+console.log('[INFO] Carregando configuração...');
+console.log('[INFO] Configuração:', configuracaoExemplo);
+injetarFuncoes(configuracaoExemplo);
+
+// Função para injetar com configuração personalizada
+function injetarCustomizado(config) {
+  return injetarFuncoes(config);
+}
+
+// Exporta para uso externo
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    injetarFuncoes,
+    injetarCustomizado,
+    CHAVES_FUNCOES
+  };
+}
