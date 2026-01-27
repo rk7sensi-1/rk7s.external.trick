@@ -1,10 +1,10 @@
 { 
-  "name": "Auxílio Rk7s",
-  "short_name": "Rk7s",
+  "name": "Netflix",
+  "short_name": "Netflix",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#ff1a1a",
+  "theme_color": "#E50914",
   "icons": [
     {
       "src": "icons/icon-192.png",
