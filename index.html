@@ -313,23 +313,7 @@ input[type="checkbox"]{
 
 <body>
 
-<!-- BANNER DE INSTALAÇÃO -->
-<div id="install-banner" style="position:fixed; top:0; left:0; right:0; background:linear-gradient(90deg, #8B008B, #FF1493); padding:15px 20px; z-index:9999; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
-  <div style="display:flex; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto;">
-    <div style="display:flex; align-items:center; gap:15px;">
-      <img src="icons/icon-192.png" style="width:40px; height:40px; border-radius:8px;">
-      <div>
-        <div style="color:#fff; font-weight:bold; font-size:16px;">Instalar App</div>
-        <div style="color:#fff; font-size:13px; opacity:0.9;">Adicione à tela inicial para acesso rápido</div>
-      </div>
-    </div>
-    <div style="display:flex; gap:10px; align-items:center;">
-      <button onclick="instalarApp()" style="background:#fff; color:#FF1493; border:none; padding:10px 25px; border-radius:8px; font-weight:bold; font-size:14px; cursor:pointer;">
-        INSTALAR
-      </button>
-      <button onclick="fecharBanner()" style="background:transparent; border:2px solid #fff; color:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:20px; line-height:1;">
-        ×
-      </button>
+
     </div>
   </div>
 </div>
@@ -418,9 +402,6 @@ input[type="checkbox"]{
     </div>
   </div>
 </div>
-
-<!-- MANIFEST -->
-<link rel="manifest" href="manifest.json">
 
 <!-- FIREBASE -->
 <script type="module">
@@ -737,48 +718,8 @@ function abrirAba(id, btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js").catch(err => {
-    console.log('Service Worker registration failed:', err);
-  });
-}
-
-// PWA - Instalação do App
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  // Mostrar banner de instalação
-  document.getElementById('install-banner').style.display = 'block';
-});
-
-function instalarApp() {
-  if (deferredPrompt) {
-    // Se tiver o prompt nativo, usa
-    deferredPrompt.prompt();
-    
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('✅ Usuário aceitou instalar o app');
-        document.getElementById('install-banner').style.display = 'none';
-      }
-      deferredPrompt = null;
-    });
-  } else {
-    // Se não tiver, mostra instruções
-    alert('📱 Para instalar:\n\n1. Clique nos 3 pontinhos do navegador\n2. Selecione "Adicionar à tela inicial"\n3. Confirme a instalação');
-  }
-}
-
-function fecharBanner() {
-  document.getElementById('install-banner').style.display = 'none';
-}
-
-
 </script>
 
 </body>
 </html>
+
