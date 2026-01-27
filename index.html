@@ -395,6 +395,9 @@ input[type="checkbox"]{
   </div>
 </div>
 
+<!-- MANIFEST -->
+<link rel="manifest" href="manifest.json">
+
 <!-- FIREBASE -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -664,18 +667,43 @@ function injetarNoJogo() {
   console.log(arquivoInjecao);
   console.log('='.repeat(50));
 
+  statusDiv.className = 'injection-status success';
+  statusDiv.textContent = '✅ Injeção realizada com sucesso!';
+
   setTimeout(() => {
     abrirJogo();
   }, 500);
 }
 
 function abrirJogo(){
+  // Abrir o jogo
   const ua = navigator.userAgent || navigator.vendor || window.opera;
-  if (/android/i.test(ua)) {
-    window.location.href="intent://#Intent;package=com.dts.freefireth;scheme=freefire;end";
-    setTimeout(()=>{
-      window.location.href="https://play.google.com/store/apps/details?id=com.dts.freefireth";
-    },2000);
+  const nome = "Free Fire"; // Pode alterar para "FF MAX" se necessário
+  
+  if (nome === "Free Fire") {
+    if (/android/i.test(ua)) {
+      window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=freefire;end";
+      setTimeout(function() {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefireth";
+      }, 2000);
+    } else if (/iPad|iPhone|iPod/.test(ua)) {
+      window.location.href = "freefire://";
+      setTimeout(function() {
+        window.location.href = "https://apps.apple.com/br/app/free-fire/id1300146617";
+      }, 2000);
+    }
+  } else if (nome === "FF MAX") {
+    if (/android/i.test(ua)) {
+      window.location.href = "intent://#Intent;package=com.dts.freefiremax;scheme=freefiremax;end";
+      setTimeout(function() {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax";
+      }, 2000);
+    } else if (/iPad|iPhone|iPod/.test(ua)) {
+      window.location.href = "freefiremax://";
+      setTimeout(function() {
+        window.location.href = "https://apps.apple.com/br/app/free-fire-max/id1444963002";
+      }, 2000);
+    }
   }
 }
 
@@ -684,6 +712,12 @@ function abrirAba(id, btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
+}
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js").catch(err => {
+    console.log('Service Worker registration failed:', err);
+  });
 }
 </script>
 
