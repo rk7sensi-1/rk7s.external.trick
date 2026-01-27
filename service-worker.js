@@ -1,11 +1,12 @@
 const CACHE_NAME = 'auxilio-rk7s-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
+
 
 // Instalar Service Worker
 self.addEventListener('install', (event) => {
@@ -44,4 +45,5 @@ self.addEventListener('fetch', (event) => {
         return fetch(event.request);
       })
   );
+
 });
