@@ -13,6 +13,7 @@
 
 body{
   margin:0;
+  padding-top:70px;
   height:100vh;
   background:linear-gradient(180deg,#2b0000,#000);
   display:flex;
@@ -313,7 +314,7 @@ input[type="checkbox"]{
 <body>
 
 <!-- BANNER DE INSTALAÇÃO -->
-<div id="install-banner" style="display:none; position:fixed; top:0; left:0; right:0; background:linear-gradient(90deg, #8B008B, #FF1493); padding:15px 20px; z-index:9999; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
+<div id="install-banner" style="position:fixed; top:0; left:0; right:0; background:linear-gradient(90deg, #8B008B, #FF1493); padding:15px 20px; z-index:9999; box-shadow:0 2px 10px rgba(0,0,0,0.3);">
   <div style="display:flex; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:15px;">
       <img src="icons/icon-192.png" style="width:40px; height:40px; border-radius:8px;">
@@ -332,6 +333,8 @@ input[type="checkbox"]{
     </div>
   </div>
 </div>
+
+<div style="height:70px;"></div>
 
 <!-- TELA DE LOGIN -->
 <div class="panel" id="login-screen">
@@ -754,6 +757,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 function instalarApp() {
   if (deferredPrompt) {
+    // Se tiver o prompt nativo, usa
     deferredPrompt.prompt();
     
     deferredPrompt.userChoice.then((choiceResult) => {
@@ -763,22 +767,16 @@ function instalarApp() {
       }
       deferredPrompt = null;
     });
+  } else {
+    // Se não tiver, mostra instruções
+    alert('📱 Para instalar:\n\n1. Clique nos 3 pontinhos do navegador\n2. Selecione "Adicionar à tela inicial"\n3. Confirme a instalação');
   }
 }
 
 function fecharBanner() {
   document.getElementById('install-banner').style.display = 'none';
-  // Salvar que o usuário fechou (opcional)
-  localStorage.setItem('bannerFechado', 'true');
 }
 
-// Verificar se já fechou o banner antes
-window.addEventListener('load', () => {
-  if (localStorage.getItem('bannerFechado') === 'true') {
-    // Se quiser não mostrar mais depois que fechar
-    // document.getElementById('install-banner').style.display = 'none';
-  }
-});
 
 </script>
 
