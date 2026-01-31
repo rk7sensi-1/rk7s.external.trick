@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Subway Surfers</title>
 
@@ -713,9 +713,15 @@ function abrirAba(id, btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
+</script>
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js");
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registrado', reg))
+      .catch(err => console.log('Erro SW', err));
+  });
 }
 </script>
 
