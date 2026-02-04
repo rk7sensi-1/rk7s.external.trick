@@ -1,729 +1,817 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subway Surfers</title>
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#000000">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Snaptube">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Snaptube - Precision</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow: hidden;
+        }
 
-body{
-  margin:0;
-  padding-top:70px;
-  height:100vh;
-  background:linear-gradient(180deg,#2b0000,#000);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-}
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-.panel{
-  width:360px;
-  background:#000;
-  border-radius:18px;
-  padding:18px;
-  border:2px solid #ff1a1a;
-  box-shadow:0 0 25px #ff1a1a;
-}
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 380px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ff0000;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+        }
 
-.title{
-  text-align:center;
-  color:#ff1a1a;
-  font-size:22px;
-  margin-bottom:14px;
-}
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-/* LOGIN SCREEN */
-#login-screen{
-  display:block;
-}
+        .logo h1 {
+            color: #ff0000;
+            font-size: 1.8em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            margin: 0;
+        }
 
-#main-app{
-  display:none;
-}
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-.login-container{
-  padding:40px 0;
-}
+        .input-group {
+            position: relative;
+        }
 
-.login-title{
-  text-align:center;
-  font-size:20px;
-  color:#ff1a1a;
-  margin-bottom:20px;
-}
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ffffff;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
 
-.key-input{
-  width:100%;
-  padding:12px;
-  background:#111;
-  border:2px solid #ff1a1a;
-  border-radius:10px;
-  color:#fff;
-  font-size:16px;
-  margin-bottom:10px;
-  outline:none;
-}
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
 
-.key-input:focus{
-  box-shadow:0 0 10px #ff1a1a;
-}
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
 
-.login-error{
-  color:#ff5555;
-  font-size:14px;
-  text-align:center;
-  margin:10px 0;
-  min-height:20px;
-}
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
 
-.login-btn{
-  width:100%;
-  padding:14px;
-  background:#ff1a1a;
-  color:#000;
-  border:none;
-  border-radius:12px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:10px;
-}
+        .error-message {
+            color: #ff0000;
+            font-size: 0.8em;
+            text-align: center;
+            min-height: 16px;
+            margin: 2px 0;
+        }
 
-.login-btn:active{
-  transform:scale(0.98);
-}
+        .btn-login {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
 
-.login-info{
-  margin-top:20px;
-  padding:15px;
-  background:#111;
-  border-radius:10px;
-  border:1px solid #ff1a1a;
-  font-size:13px;
-  line-height:1.6;
-}
+        .btn-login:hover {
+            background: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        }
 
-/* USER BADGE */
-.user-badge{
-  position:absolute;
-  top:10px;
-  right:10px;
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:bold;
-}
+        .btn-login:active {
+            transform: scale(0.98);
+        }
 
-.user-badge.admin{
-  background:#ffd700;
-  color:#000;
-}
+        .btn-login:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-.user-badge.user{
-  background:#00ff00;
-  color:#000;
-}
+        .dashboard {
+            display: none;
+        }
 
-.logout-btn{
-  position:absolute;
-  top:10px;
-  left:10px;
-  padding:6px 12px;
-  background:#ff1a1a;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:12px;
-  cursor:pointer;
-}
+        .dashboard.active {
+            display: block;
+        }
 
-/* ABAS */
-.tabs{
-  display:flex;
-  gap:10px;
-  margin-bottom:16px;
-  margin-top:30px;
-}
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-.tab{
-  flex:1;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ff1a1a;
-  background:#111;
-  color:#fff;
-  cursor:pointer;
-  font-size:15px;
-}
+        .dashboard-header h2 {
+            color: #ff0000;
+            font-size: 1.8em;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            letter-spacing: 6px;
+            margin: 0;
+            font-weight: 900;
+        }
 
-.tab.active{
-  background:#ff1a1a;
-  color:#000;
-}
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
 
-/* CHECKBOX */
-.row{
-  display:flex;
-  gap:12px;
-  margin:10px 0;
-}
+        .tab {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            color: #ffffff;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
 
-.check{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:15px;
-}
+        .tab:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
 
-.column{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:10px;
-}
+        .tab.active {
+            background: #ff0000;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+        }
 
-input[type="checkbox"]{
-  accent-color:#ff1a1a;
-  width:15px;
-  height:15px;
-}
+        .tab-content {
+            display: none;
+        }
 
-/* SLIDER */
-.slider-line{
-  display:flex;
-  align-items:center;
-  margin:18px 0;
-  gap:10px;
-}
+        .tab-content.active {
+            display: block;
+        }
 
-.slider-line span.label{
-  font-size:16px;
-  white-space:nowrap;
-  flex-shrink:0;
-}
+        .function-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
 
-.slider-line .slider-wrapper{
-  flex:1;
-  max-width:150px;
-  position:relative;
-}
+        .function-card:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
 
-.slider-line input[type="range"]{
-  width:100%;
-  height:4px;
-  -webkit-appearance:none;
-  appearance:none;
-  background:#ff1a1a;
-  outline:none;
-  border-radius:2px;
-}
+        .function-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.slider-line input[type="range"]::-webkit-slider-track{
-  width:100%;
-  height:4px;
-  background:#ff1a1a;
-  border-radius:2px;
-}
+        .function-title {
+            font-size: 1em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
 
-.slider-line input[type="range"]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  appearance:none;
-  width:18px;
-  height:18px;
-  background:#fff;
-  border-radius:50%;
-  cursor:pointer;
-  box-shadow:0 0 5px rgba(0,0,0,0.5);
-}
+        .function-description {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75em;
+            line-height: 1.3;
+        }
 
-.slider-line input[type="range"]::-moz-range-track{
-  width:100%;
-  height:4px;
-  background:#ff1a1a;
-  border-radius:2px;
-}
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #333;
+            border: 2px solid #555;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
 
-.slider-line input[type="range"]::-moz-range-thumb{
-  width:18px;
-  height:18px;
-  background:#fff;
-  border-radius:50%;
-  cursor:pointer;
-  border:none;
-  box-shadow:0 0 5px rgba(0,0,0,0.5);
-}
+        .toggle-switch.active {
+            background: #ff0000;
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
 
-.slider-line .value{
-  text-align:right;
-  font-size:18px;
-  font-weight:bold;
-  min-width:55px;
-  flex-shrink:0;
-  margin-left:auto;
-}
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
 
-/* BOTÃO */
-.btn{
-  margin-top:16px;
-  width:100%;
-  padding:14px;
-  background:#ff1a1a;
-  color:#000;
-  border:none;
-  border-radius:14px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-}
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
 
-/* CONTEÚDO */
-.content{display:none;}
-.content.active{display:block;}
+        .btn-inject {
+            width: 100%;
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            letter-spacing: 1.5px;
+        }
 
-.info{
-  font-size:15px;
-  line-height:1.8;
-}
+        .btn-inject:hover {
+            background: #cc0000;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+        }
 
-.injection-status{
-  margin-top:10px;
-  font-size:13px;
-  text-align:center;
-  padding:8px;
-  border-radius:6px;
-}
+        .status-message {
+            text-align: center;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            display: none;
+        }
 
-.injection-status.success{
-  background:#0a4d0a;
-  color:#0f0;
-}
+        .status-message.success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: block;
+        }
 
-.injection-status.info{
-  background:#1a1a4d;
-  color:#5599ff;
-}
-</style>
+        .status-message.loading {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            display: block;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8em;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .install-prompt {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .install-prompt.show {
+            display: block;
+        }
+
+        .install-prompt p {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .btn-install {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-install:hover {
+            background: #cc0000;
+        }
+    </style>
 </head>
-
 <body>
+    <canvas id="particles"></canvas>
 
-<!-- TELA DE LOGIN -->
-<div class="panel" id="login-screen">
-  <div class="title">Auxílio Rk7s</div>
-  
-  <div class="login-container">
-    <div class="login-title">🔐 Login com Key</div>
-    
-    <input 
-      type="text" 
-      class="key-input" 
-      id="key-input" 
-      placeholder="Digite sua key aqui..."
-      onkeypress="if(event.key==='Enter') loginWithKey()"
-    >
-    
-    <div class="login-error" id="login-error"></div>
-    
-    <button class="login-btn" onclick="loginWithKey()">ENTRAR</button>
-  </div>
-</div>
+    <div class="container">
+        <!-- Install Prompt -->
+        <div class="install-prompt" id="installPrompt">
+            <p>📱 Instale o Snaptube na tela inicial!</p>
+            <button class="btn-install" id="btnInstall">INSTALAR APP</button>
+        </div>
 
-<!-- APLICAÇÃO PRINCIPAL -->
-<div class="panel" id="main-app" style="position:relative;">
-  <button class="logout-btn" onclick="logout()">Sair</button>
-  <div class="user-badge" id="user-badge"></div>
-  
-  <div class="title">Auxílio Rk7s</div>
+        <!-- Login Screen -->
+        <div id="loginScreen">
+            <div class="logo">
+                <h1>PRECISION</h1>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="keyInput">Chave de Acesso</label>
+                    <input type="text" id="keyInput" placeholder="Digite sua chave" required>
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+                <button type="submit" class="btn-login" id="btnLogin">ENTRAR</button>
+            </form>
+        </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="abrirAba('funcoes', this)">Funções</button>
-    <button class="tab" onclick="abrirAba('info', this)">Info</button>
-  </div>
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+            </div>
 
-  <div id="funcoes" class="content active">
+            <div class="tabs">
+                <div class="tab active" id="tabFuncoes">Funções</div>
+                <div class="tab" id="tabInformacoes">Informações</div>
+            </div>
 
-    <div class="row">
-      <label class="check"><input type="checkbox" id="auxilio100">Auxílio 100%</label>
-      <label class="check"><input type="checkbox" id="precisao">Ativar Precisão</label>
-      <label class="check"><input type="checkbox" id="fps">FPS</label>
+            <!-- Tab Funções -->
+            <div class="tab-content active" id="contentFuncoes">
+                <div class="function-card">
+                    <div class="function-header">
+                        <div>
+                            <div class="function-title">Precisão Full</div>
+                            <div class="function-description">Melhora a precisão das mira 
+com qualquer arma</div>
+                        </div>
+                        <div class="toggle-switch" id="toggleAimbot">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="function-card">
+                    <div class="function-header">
+                        <div>
+                            <div class="function-title">Regedit</div>
+                            <div class="function-description">Otimiza 100% os travamentos e Recoil</div>
+                        </div>
+                        <div class="toggle-switch" id="toggleRegedit">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="function-card">
+                    <div class="function-header">
+                        <div>
+                            <div class="function-title">Otimização</div>
+                            <div class="function-description">Remove de lags e travamentos no jogo</div>
+                        </div>
+                        <div class="toggle-switch" id="toggleOptimization">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-inject" id="btnInject">INJETAR FUNÇÕES</button>
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+
+            <!-- Tab Informações -->
+            <div class="tab-content" id="contentInformacoes">
+                <div class="info-card">
+                    <div class="info-row">
+                        <span class="info-label">Versão:</span>
+                        <span class="info-value" id="infoVersion">1.0.0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value" id="infoStatus">Ativo</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Dispositivo:</span>
+                        <span class="info-value" id="infoDevice">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Último Acesso:</span>
+                        <span class="info-value" id="infoLastAccess">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Chave:</span>
+                        <span class="info-value" id="infoKey">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- FOV -->
-    <div class="slider-line">
-      <span class="label">Fov min</span>
-      <div class="slider-wrapper">
-        <input type="range" id="fovSlider" min="0" max="50" value="25"
-          oninput="fovVal.innerText=this.value+'%'">
-      </div>
-      <span class="value" id="fovVal">25%</span>
-    </div>
+    <!-- Particles Animation -->
+    <script>
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    <!-- PRECISÃO -->
-    <div class="slider-line">
-      <span class="label">Nível da precisão</span>
-      <div class="slider-wrapper">
-        <input type="range" id="precSlider" min="0" max="70" value="40"
-          oninput="precVal.innerText=this.value">
-      </div>
-      <span class="value" id="precVal">40</span>
-    </div>
+        const particles = [];
+        const particleCount = 100;
 
-    <div class="column">
-      <label class="check"><input type="checkbox" id="aimbot">Ativar Aimbot</label>
-      <label class="check"><input type="checkbox" id="recoil">No Recoil</label>
-    </div>
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
 
-    <button class="btn" onclick="injetarNoJogo()">Injetar no jogo</button>
-    <div id="injecaoStatus"></div>
-  </div>
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
 
-  <div id="info" class="content">
-    <div class="info">
-      Criado por: @rk7s_ffx<br>
-      Dica: ative as funções dentro do jogo.<br><br>
-      <strong>Como usar:</strong><br>
-      1. Marque as funções que deseja<br>
-      2. Ajuste os valores dos sliders<br>
-      3. Clique em "Injetar no jogo"<br>
-      4. O sistema irá injetar apenas as funções ativas
-    </div>
-  </div>
-</div>
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
 
-<!-- FIREBASE -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getDatabase, ref, get, set, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLAyXsGW_GETG2zZVonSSgqfSQkBCAzaQ",
-    authDomain: "rk7sxt.firebaseapp.com",
-    databaseURL: "https://rk7sxt-default-rtdb.firebaseio.com",
-    projectId: "rk7sxt",
-    storageBucket: "rk7sxt.firebasestorage.app",
-    messagingSenderId: "770208970810",
-    appId: "1:770208970810:web:4aa949d949166635071d03",
-    measurementId: "G-HNJVMPY984"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-  
-  window.db = database;
-  window.dbRef = ref;
-  window.dbGet = get;
-  window.dbSet = set;
-  window.dbRemove = remove;
-  
-  console.log("🔥 Firebase conectado!");
-</script>
+            draw() {
+                ctx.fillStyle = `rgba(255, 0, 0, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
-<script>
-let currentUser = null;
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
 
-// Códigos de injeção para cada função
-const CODIGOS_INJECAO = {
-  auxilio100: {
-    nome: 'Auxílio 100%',
-    chave: 'RK7S-AUX100-F4E2',
-    codigo: `
-// [INJECT] Auxílio 100%
-// Chave: RK7S-AUX100-F4E2
-function injetarAuxilio100() {
-  console.log('[✓] Auxílio 100% ativado');
-  window.auxilio100Ativo = true;
-}
-injetarAuxilio100();
-`
-  },
-  precisao: {
-    nome: 'Ativar Precisão',
-    chave: 'RK7S-PREC-8B91',
-    codigo: `
-// [INJECT] Precisão Ativada
-// Chave: RK7S-PREC-8B91
-function injetarPrecisao() {
-  console.log('[✓] Precisão ativada');
-  window.precisaoAtiva = true;
-}
-injetarPrecisao();
-`
-  },
-  fps: {
-    nome: 'FPS Boost',
-    chave: 'RK7S-FPS-C3D7',
-    codigo: `
-// [INJECT] FPS Otimizado
-// Chave: RK7S-FPS-C3D7
-function injetarFPS() {
-  console.log('[✓] FPS otimizado');
-  window.fpsBoostAtivo = true;
-}
-injetarFPS();
-`
-  },
-  aimbot: {
-    nome: 'Aimbot',
-    chave: 'RK7S-AIM-D7B3',
-    codigo: `
-// [INJECT] Aimbot Ativado
-// Chave: RK7S-AIM-D7B3
-function injetarAimbot() {
-  console.log('[✓] Aimbot ativado');
-  window.aimbotAtivo = true;
-}
-injetarAimbot();
-`
-  },
-  recoil: {
-    nome: 'No Recoil',
-    chave: 'RK7S-RECL-6F94',
-    codigo: `
-// [INJECT] No Recoil Ativado
-// Chave: RK7S-RECL-6F94
-function injetarNoRecoil() {
-  console.log('[✓] No Recoil ativado');
-  window.noRecoilAtivo = true;
-}
-injetarNoRecoil();
-`
-  },
-  fov: {
-    nome: 'FOV Customizado',
-    chave: 'RK7S-FOV-A5F8',
-    codigo: (valor) => `
-// [INJECT] FOV Configurado
-// Chave: RK7S-FOV-A5F8
-// Valor: ${valor}%
-function injetarFOV() {
-  const fovValue = ${valor};
-  console.log('[✓] FOV configurado para: ' + fovValue + '%');
-  window.fovCustomizado = fovValue;
-}
-injetarFOV();
-`
-  },
-  nivelPrecisao: {
-    nome: 'Nível de Precisão',
-    chave: 'RK7S-PRECLVL-9E42',
-    codigo: (nivel) => `
-// [INJECT] Nível de Precisão
-// Chave: RK7S-PRECLVL-9E42
-// Nível: ${nivel}
-function injetarNivelPrecisao() {
-  const nivelPrecisao = ${nivel};
-  console.log('[✓] Nível de precisão configurado: ' + nivelPrecisao);
-  window.nivelPrecisao = nivelPrecisao;
-}
-injetarNivelPrecisao();
-`
-  }
-};
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
 
-// LOGIN COM KEY
-async function loginWithKey() {
-  const keyInput = document.getElementById('key-input').value.trim();
-  const errorDiv = document.getElementById('login-error');
-  
-  if (!keyInput) {
-    errorDiv.textContent = '❌ Digite uma key válida';
-    return;
-  }
-  
-  try {
-    const keyRef = window.dbRef(window.db, 'keys/' + keyInput);
-    const snapshot = await window.dbGet(keyRef);
-    
-    if (snapshot.exists()) {
-      const keyData = snapshot.val();
-      
-      if (keyData.active) {
-        currentUser = {
-          key: keyInput,
-          isAdmin: keyData.admin || false
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+
+    <!-- PWA Installation Script -->
+    <script>
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const btnInstall = document.getElementById('btnInstall');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installPrompt.classList.add('show');
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                installPrompt.classList.remove('show');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA installed');
+            installPrompt.classList.remove('show');
+        });
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.log('Service Worker registration failed', err));
+        }
+    </script>
+
+    <!-- FIREBASE REALTIME DATABASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK9laPRZI1RaPHNrnad_5wRDeaJZpIVUA",
+            authDomain: "precision-e87a6.firebaseapp.com",
+            databaseURL: "https://precision-e87a6-default-rtdb.firebaseio.com",
+            projectId: "precision-e87a6",
         };
         
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
-        
-        const badge = document.getElementById('user-badge');
-        if (currentUser.isAdmin) {
-          badge.className = 'user-badge admin';
-          badge.textContent = '👑 ADMIN';
-        } else {
-          badge.className = 'user-badge user';
-          badge.textContent = '✅ USER';
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Device Info
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            const platform = navigator.platform;
+            return `${platform}_${ua.substring(0, 50)}`;
         }
-        
-        console.log('✅ Login realizado:', currentUser.isAdmin ? 'ADMIN' : 'USER');
-      } else {
-        errorDiv.textContent = '❌ Esta key está inativa';
-      }
-    } else {
-      errorDiv.textContent = '❌ Key inválida';
-    }
-  } catch (error) {
-    errorDiv.textContent = '❌ Erro ao verificar key';
-    console.error(error);
-  }
-}
 
-// LOGOUT
-function logout() {
-  currentUser = null;
-  document.getElementById('login-screen').style.display = 'block';
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('key-input').value = '';
-  document.getElementById('login-error').textContent = '';
-}
+        function formatDateTime() {
+            const now = new Date();
+            return now.toLocaleString('pt-BR');
+        }
 
-// Função principal de injeção
-function injetarNoJogo() {
-  if (!currentUser) {
-    alert('❌ Você precisa estar logado!');
-    return;
-  }
+        // Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const keyInput = document.getElementById('keyInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const btnLogin = document.getElementById('btnLogin');
+        const statusMessage = document.getElementById('statusMessage');
 
-  const statusDiv = document.getElementById('injecaoStatus');
-  let codigosParaInjetar = [];
-  let funcoesAtivas = [];
+        // Tabs
+        const tabFuncoes = document.getElementById('tabFuncoes');
+        const tabInformacoes = document.getElementById('tabInformacoes');
+        const contentFuncoes = document.getElementById('contentFuncoes');
+        const contentInformacoes = document.getElementById('contentInformacoes');
 
-  let arquivoInjecao = `
-/*
- * ==========================================
- * AUXÍLIO RK7S - ARQUIVO DE INJEÇÃO
- * ==========================================
- * Criado por: @rk7s_ffx
- * User: ${currentUser.isAdmin ? 'ADMIN' : 'USER'}
- * Key: ${currentUser.key}
- * Data: ${new Date().toLocaleString('pt-BR')}
- * ==========================================
- */
+        // Info fields
+        const infoDevice = document.getElementById('infoDevice');
+        const infoLastAccess = document.getElementById('infoLastAccess');
+        const infoKey = document.getElementById('infoKey');
 
-`;
+        // Tab switching
+        tabFuncoes.addEventListener('click', () => {
+            tabFuncoes.classList.add('active');
+            tabInformacoes.classList.remove('active');
+            contentFuncoes.classList.add('active');
+            contentInformacoes.classList.remove('active');
+        });
 
-  if (document.getElementById('auxilio100').checked) {
-    const config = CODIGOS_INJECAO.auxilio100;
-    codigosParaInjetar.push(config.codigo);
-    funcoesAtivas.push(config.nome);
-  }
+        tabInformacoes.addEventListener('click', () => {
+            tabInformacoes.classList.add('active');
+            tabFuncoes.classList.remove('active');
+            contentInformacoes.classList.add('active');
+            contentFuncoes.classList.remove('active');
+        });
 
-  if (document.getElementById('precisao').checked) {
-    const config = CODIGOS_INJECAO.precisao;
-    codigosParaInjetar.push(config.codigo);
-    funcoesAtivas.push(config.nome);
-  }
+        // Toggles
+        const toggleAimbot = document.getElementById('toggleAimbot');
+        const toggleRegedit = document.getElementById('toggleRegedit');
+        const toggleOptimization = document.getElementById('toggleOptimization');
+        const btnInject = document.getElementById('btnInject');
 
-  if (document.getElementById('fps').checked) {
-    const config = CODIGOS_INJECAO.fps;
-    codigosParaInjetar.push(config.codigo);
-    funcoesAtivas.push(config.nome);
-  }
+        // Toggle functionality
+        [toggleAimbot, toggleRegedit, toggleOptimization].forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
 
-  if (document.getElementById('aimbot').checked) {
-    const config = CODIGOS_INJECAO.aimbot;
-    codigosParaInjetar.push(config.codigo);
-    funcoesAtivas.push(config.nome);
-  }
+        // Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const key = keyInput.value.trim();
+            errorMessage.innerText = '';
+            btnLogin.disabled = true;
+            btnLogin.innerText = 'VERIFICANDO...';
 
-  if (document.getElementById('recoil').checked) {
-    const config = CODIGOS_INJECAO.recoil;
-    codigosParaInjetar.push(config.codigo);
-    funcoesAtivas.push(config.nome);
-  }
+            try {
+                const keyRef = ref(database, `keys/${key}`);
+                const snapshot = await get(keyRef);
+                
+                if (!snapshot.exists()) {
+                    errorMessage.innerText = "KEY não encontrada!";
+                    btnLogin.disabled = false;
+                    btnLogin.innerText = 'ENTRAR';
+                    return;
+                }
 
-  const fovValue = document.getElementById('fovSlider').value;
-  const config = CODIGOS_INJECAO.fov;
-  codigosParaInjetar.push(config.codigo(fovValue));
-  funcoesAtivas.push(`${config.nome} (${fovValue}%)`);
+                const data = snapshot.val();
+                const deviceInfo = getDeviceInfo();
+                const dispositivos = data.dispositivos || [];
+                const maxDispositivos = data.maxDispositivos || 1;
+                const deviceExists = dispositivos.includes(deviceInfo);
 
-  const precValue = document.getElementById('precSlider').value;
-  const configPrec = CODIGOS_INJECAO.nivelPrecisao;
-  codigosParaInjetar.push(configPrec.codigo(precValue));
-  funcoesAtivas.push(`${configPrec.nome} (${precValue})`);
+                if (!deviceExists) {
+                    if (dispositivos.length >= maxDispositivos) {
+                        errorMessage.innerText = `Limite de ${maxDispositivos} dispositivo(s) atingido!`;
+                        btnLogin.disabled = false;
+                        btnLogin.innerText = 'ENTRAR';
+                        return;
+                    }
+                    dispositivos.push(deviceInfo);
+                    await update(keyRef, {
+                        dispositivos: dispositivos
+                    });
+                }
 
-  arquivoInjecao += codigosParaInjetar.join('\n');
-  arquivoInjecao += `
+                const logEntry = `Acesso de ${deviceInfo} em ${formatDateTime()}`;
+                const logs = data.logs || [];
+                logs.push(logEntry);
+                
+                await update(keyRef, {
+                    logs: logs,
+                    ultimoAcesso: formatDateTime()
+                });
 
-/*
- * ==========================================
- * FUNÇÕES INJETADAS: ${funcoesAtivas.length}
- * ${funcoesAtivas.map(f => '- ' + f).join('\n * ')}
- * ==========================================
- */
-`;
+                // Store user info
+                const userKey = key;
+                const lastAccess = formatDateTime();
+                
+                // Populate info tab
+                infoDevice.innerText = deviceInfo.substring(0, 30) + '...';
+                infoLastAccess.innerText = lastAccess;
+                infoKey.innerText = userKey;
 
-  console.log('='.repeat(50));
-  console.log('ARQUIVO DE INJEÇÃO GERADO');
-  console.log('='.repeat(50));
-  console.log(arquivoInjecao);
-  console.log('='.repeat(50));
+                // Ensure all toggles are OFF
+                toggleAimbot.classList.remove('active');
+                toggleRegedit.classList.remove('active');
+                toggleOptimization.classList.remove('active');
 
-  statusDiv.className = 'injection-status success';
-  statusDiv.textContent = '✅ Injeção realizada com sucesso!';
+                // Login successful
+                loginScreen.style.display = 'none';
+                dashboard.classList.add('active');
 
-  setTimeout(() => {
-    abrirJogo();
-  }, 500);
-}
+            } catch (error) {
+                console.error('Erro:', error);
+                errorMessage.innerText = 'Erro ao conectar com o servidor!';
+                btnLogin.disabled = false;
+                btnLogin.innerText = 'ENTRAR';
+            }
+        });
 
-function abrirJogo(){
-  // Abrir o jogo
-  const ua = navigator.userAgent || navigator.vendor || window.opera;
-  const nome = "Free Fire"; // Pode alterar para "FF MAX" se necessário
-  
-  if (nome === "Free Fire") {
-    if (/android/i.test(ua)) {
-      window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=freefire;end";
-      setTimeout(function() {
-        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefireth";
-      }, 2000);
-    } else if (/iPad|iPhone|iPod/.test(ua)) {
-      window.location.href = "freefire://";
-      setTimeout(function() {
-        window.location.href = "https://apps.apple.com/br/app/free-fire/id1300146617";
-      }, 2000);
-    }
-  } else if (nome === "FF MAX") {
-    if (/android/i.test(ua)) {
-      window.location.href = "intent://#Intent;package=com.dts.freefiremax;scheme=freefiremax;end";
-      setTimeout(function() {
-        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax";
-      }, 2000);
-    } else if (/iPad|iPhone|iPod/.test(ua)) {
-      window.location.href = "freefiremax://";
-      setTimeout(function() {
-        window.location.href = "https://apps.apple.com/br/app/free-fire-max/id1444963002";
-      }, 2000);
-    }
-  }
-}
+        // Function to open game
+        function abrirJogo(){
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const nome = "Free Fire"; // Pode alterar para "FF MAX" se necessário
+            
+            if (nome === "Free Fire") {
+                if (/android/i.test(ua)) {
+                    window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=freefire;end";
+                    setTimeout(function() {
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefireth";
+                    }, 2000);
+                } else if (/iPad|iPhone|iPod/.test(ua)) {
+                    window.location.href = "freefire://";
+                    setTimeout(function() {
+                        window.location.href = "https://apps.apple.com/br/app/free-fire/id1300146617";
+                    }, 2000);
+                }
+            } else if (nome === "FF MAX") {
+                if (/android/i.test(ua)) {
+                    window.location.href = "intent://#Intent;package=com.dts.freefiremax;scheme=freefiremax;end";
+                    setTimeout(function() {
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax";
+                    }, 2000);
+                } else if (/iPad|iPhone|iPod/.test(ua)) {
+                    window.location.href = "freefiremax://";
+                    setTimeout(function() {
+                        window.location.href = "https://apps.apple.com/br/app/free-fire-max/id1444963002";
+                    }, 2000);
+                }
+            }
+        }
 
-function abrirAba(id, btn){
-  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-</script>
+        // Inject button
+        btnInject.addEventListener('click', () => {
+            const functions = [];
+            
+            if (toggleAimbot.classList.contains('active')) {
+                functions.push('Precisão Full');
+            }
+            if (toggleRegedit.classList.contains('active')) {
+                functions.push('Regedit');
+            }
+            if (toggleOptimization.classList.contains('active')) {
+                functions.push('Otimização');
+            }
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('SW registrado', reg))
-      .catch(err => console.log('Erro SW', err));
-  });
-}
-</script>
+            if (functions.length === 0) {
+                statusMessage.className = 'status-message';
+                statusMessage.innerText = 'Selecione pelo menos uma função!';
+                statusMessage.style.background = 'rgba(255, 68, 68, 0.1)';
+                statusMessage.style.border = '1px solid #ff4444';
+                statusMessage.style.color = '#ff4444';
+                statusMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 3000);
+                return;
+            }
 
+            // Disable button during injection
+            btnInject.disabled = true;
+            btnInject.innerText = 'INJETANDO...';
+            
+            statusMessage.className = 'status-message loading';
+            statusMessage.innerText = 'Injetando funções...';
+            
+            setTimeout(() => {
+                statusMessage.className = 'status-message success';
+                statusMessage.innerText = `✅ Funções injetadas: ${functions.join(', ')}`;
+                
+                setTimeout(() => {
+                    statusMessage.innerText = '🎮 Abrindo o jogo...';
+                    
+                    setTimeout(() => {
+                        abrirJogo();
+                        btnInject.disabled = false;
+                        btnInject.innerText = 'INJETAR FUNÇÕES';
+                    }, 1500);
+                }, 2000);
+            }, 2000);
+        });
+    </script>
 </body>
 </html>
